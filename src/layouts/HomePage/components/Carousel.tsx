@@ -26,6 +26,8 @@ export const Carousel = () => {
             const responseJson = await response.json();
 
             const responseData = responseJson._embedded.bookEntities;
+
+            const loadedBooks : BookModel[] = [];
         };
         fetchBooks().catch(
             (error:any)=>{
