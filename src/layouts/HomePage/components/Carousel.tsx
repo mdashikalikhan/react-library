@@ -1,6 +1,40 @@
 import { ReturnBook } from "./ReturnBook";
+import { useState,useEffect } from "react";
+import BookModel from "../../../models/BookModel";
+import { error } from "console";
 
 export const Carousel = () => {
+
+    const[books, setBooks] = useState<BookModel[]>([]);
+
+    const[isLoading, setIsLoading] = useState(true);
+
+    const[httpError, setHttpError] = useState(null);
+
+    useEffect(()=>{
+        const fetchBooks = async()=>{
+            const baseUrl : string = "http://localhost:8080/api/bookEntities";
+
+            const url:string = `${baseUrl}?page=0&size=9`;
+
+            const response = await fetch(url);
+
+            if(!response.ok){
+                throw new Error('API fetch error!!!');
+            }
+
+            const responseJson = await response.json();
+
+            const responseData = responseJson._embedded.bookEntities;
+        };
+        fetchBooks().catch(
+            (error:any)=>{
+                setIsLoading(false);
+                setHttpError(error.message);
+            }
+        )
+    },[]);
+
     return (
         <div className="container mt-5" style={{ height: 550 }}>
             <div className="homepage-carousel-title">
