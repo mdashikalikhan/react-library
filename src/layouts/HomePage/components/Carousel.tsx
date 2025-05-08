@@ -82,23 +82,30 @@ export const Carousel = () => {
                 <div className="carousel-inner">
                     <div className="carousel-item active">
                         <div className="row d-flex justify-content-center align-items-center">
-                            <ReturnBook/>
-                            <ReturnBook/>
-                            <ReturnBook/>
+                            {
+                                books.slice(0, 3)
+                                .map(book=>(
+                                    <ReturnBook key={book.id} book={book}/>
+                                ))
+                            }
                         </div>
                     </div>
 
                     <div className="carousel-item">
                         <div className="row d-flex justify-content-center align-items-center">
-                            <ReturnBook/>
-                            <ReturnBook/>
+                        {
+                                books.slice(3, 7)
+                                .map(book=>(
+                                    <ReturnBook key={book.id} book={book}/>
+                                ))
+                            }
                             
                         </div>
                     </div>
 
                     <div className="carousel-item">
                         <div className="row d-flex justify-content-center align-items-center">
-                            <ReturnBook/>
+                            <ReturnBook key={books[8].id} book={books[8]}/>
                             
                         </div>
                     </div>
@@ -135,7 +142,7 @@ export const Carousel = () => {
                 <div className="row d-flex justify-content-center
                         align-items-center">
 
-                    <ReturnBook/>
+                    <ReturnBook key={books[9].id} book={books[9]}/>
 
                 </div>
 
