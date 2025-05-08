@@ -1,25 +1,25 @@
 import { ReturnBook } from "./ReturnBook";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import BookModel from "../../../models/BookModel";
-import { error } from "console";
+import { SpinnerLoading } from "../../utils/SpinnerLoading";
 
 export const Carousel = () => {
 
-    const[books, setBooks] = useState<BookModel[]>([]);
+    const [books, setBooks] = useState<BookModel[]>([]);
 
-    const[isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const[httpError, setHttpError] = useState(null);
+    const [httpError, setHttpError] = useState(null);
 
-    useEffect(()=>{
-        const fetchBooks = async()=>{
-            const baseUrl : string = "http://localhost:8080/api/bookEntities";
+    useEffect(() => {
+        const fetchBooks = async () => {
+            const baseUrl: string = "http://localhost:8080/api/bookEntities";
 
-            const url:string = `${baseUrl}?page=0&size=9`;
+            const url: string = `${baseUrl}?page=0&size=9`;
 
             const response = await fetch(url);
 
-            if(!response.ok){
+            if (!response.ok) {
                 throw new Error('API fetch error!!!');
             }
 
@@ -27,9 +27,9 @@ export const Carousel = () => {
 
             const responseData = responseJson._embedded.bookEntities;
 
-            const loadedBooks : BookModel[] = [];
+            const loadedBooks: BookModel[] = [];
 
-            for(const key in responseData){
+            for (const key in responseData) {
                 loadedBooks.push({
                     id: responseData[key].id,
                     title: responseData[key].title,
@@ -37,7 +37,7 @@ export const Carousel = () => {
                     description: responseData[key].description,
                     copies: responseData[key].copies,
                     copiesAvailable: responseData[key].copiesAvailable,
-                    category:  responseData[key].category,
+                    category: responseData[key].category,
                     img: responseData[key].image
                 });
             }
@@ -47,21 +47,21 @@ export const Carousel = () => {
 
         };
         fetchBooks().catch(
-            (error:any)=>{
+            (error: any) => {
                 setIsLoading(false);
                 setHttpError(error.message);
             }
         )
-    },[]);
+    }, []);
 
-    if(isLoading){
-        return(<div className="container m-5">
-            <p>Loading...</p>
-        </div>);
+    if (isLoading) {
+        return (
+            <SpinnerLoading/>
+        );
     }
 
-    if(httpError){
-        return(<div className="container m-5">
+    if (httpError) {
+        return (<div className="container m-5">
             <p>{httpError}</p>
         </div>);
     }
@@ -84,29 +84,34 @@ export const Carousel = () => {
                         <div className="row d-flex justify-content-center align-items-center">
                             {
                                 books.slice(0, 3)
-                                .map(book=>(
-                                    <ReturnBook key={book.id} book={book}/>
-                                ))
+                                    .map(book => (
+                                        <ReturnBook key={book.id} book={book} />
+                                    ))
                             }
                         </div>
                     </div>
 
                     <div className="carousel-item">
                         <div className="row d-flex justify-content-center align-items-center">
-                        {
-                                books.slice(3, 7)
-                                .map(book=>(
-                                    <ReturnBook key={book.id} book={book}/>
-                                ))
+                            {
+                                books.slice(3, 6)
+                                    .map(book => (
+                                        <ReturnBook key={book.id} book={book} />
+                                    ))
                             }
-                            
+
                         </div>
                     </div>
 
                     <div className="carousel-item">
                         <div className="row d-flex justify-content-center align-items-center">
-                            <ReturnBook key={books[8].id} book={books[8]}/>
-                            
+                            {
+                                books.slice(6, 9)
+                                    .map(book => (
+                                        <ReturnBook key={book.id} book={book} />
+                                    ))
+                            }
+
                         </div>
                     </div>
                 </div>
@@ -142,7 +147,7 @@ export const Carousel = () => {
                 <div className="row d-flex justify-content-center
                         align-items-center">
 
-                    <ReturnBook key={books[9].id} book={books[9]}/>
+                    <ReturnBook key={books[8].id} book={books[8]} />
 
                 </div>
 
