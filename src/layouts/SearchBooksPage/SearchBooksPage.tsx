@@ -21,17 +21,30 @@ export const SearchBooksPage = () => {
 
     const [totalPage, setTotalPage] = useState(0);
 
+    const [search, setSearch] = useState('');
+
+    const [searchUrl, setSearchUrl] = useState('');
+
     useEffect(() => {
         const fetchBooks = async () => {
             const baseUrl: string = "http://localhost:8080/api/bookEntities";
 
-            const url: string = `${baseUrl}?page=${currentPage}&size=${booksPerPage}`;
+            let url: string = '';
 
+            if(searchUrl===''){
+                url = `${baseUrl}?page=${currentPage}&size=${booksPerPage}`;
+            } else{
+                url = `${baseUrl}${searchUrl}`;
+            }
+
+            console.log('url: ' + url);
             const response = await fetch(url);
 
             if (!response.ok) {
                 throw new Error('API fetch error!!!');
             }
+
+            console.log(response);
 
             const responseJson = await response.json();
 
@@ -63,11 +76,12 @@ export const SearchBooksPage = () => {
         fetchBooks().catch(
             (error: any) => {
                 setIsLoading(false);
-                setHttpError(error.message);
+                setHttpError(error.message );
+                
             }
         )
         window.scroll(0, 0);
-    }, [currentPage]);
+    }, [currentPage, searchUrl]);
 
     if (isLoading) {
         return (
@@ -79,6 +93,16 @@ export const SearchBooksPage = () => {
         return (<div className="container m-5">
             <p>{httpError}</p>
         </div>);
+    }
+
+    const searchHandleChange = ()=>{
+        if(search===''){
+            setSearchUrl('');
+        } else {
+            
+            setSearchUrl(`/search/findByTitleContaining?title=${search}&page=0&size=${booksPerPage}`);
+        
+        }
     }
 
 
@@ -101,8 +125,10 @@ export const SearchBooksPage = () => {
                                 <input type="search"
                                     className="form-control me-2"
                                     placeholder="Search"
-                                    aria-labelledby="Search" />
-                                <button className="btn btn-outlike-success">
+                                    aria-labelledby="Search" 
+                                    onChange={e=>setSearch(e.target.value)}/>
+                                <button className="btn btn-outline-success"
+                                    onClick={()=>searchHandleChange()}>
                                     Search
                                 </button>
                             </div>
