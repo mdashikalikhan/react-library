@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import BookModel from "../../models/BookModel";
 import { SpinnerLoading } from "../utils/SpinnerLoading";
+import { SearchBook } from "./components/SearchBook";
+import { Pagination } from "../utils/Pagination";
 
 
-export const SearchBooksPage = ()=>{
+export const SearchBooksPage = () => {
 
     const [books, setBooks] = useState<BookModel[]>([]);
 
@@ -11,11 +13,19 @@ export const SearchBooksPage = ()=>{
 
     const [httpError, setHttpError] = useState(null);
 
+    const [currentPage, setCurrentPage] = useState(0);
+
+    const [booksPerPage] = useState(5);
+
+    const [totalElementOfBooks, setTotalElementOfBooks] = useState(0);
+
+    const [totalPage, setTotalPage] = useState(0);
+
     useEffect(() => {
         const fetchBooks = async () => {
             const baseUrl: string = "http://localhost:8080/api/bookEntities";
 
-            const url: string = `${baseUrl}?page=0&size=5`;
+            const url: string = `${baseUrl}?page=${currentPage}&size=${booksPerPage}`;
 
             const response = await fetch(url);
 
@@ -26,6 +36,10 @@ export const SearchBooksPage = ()=>{
             const responseJson = await response.json();
 
             const responseData = responseJson._embedded.bookEntities;
+
+            setTotalElementOfBooks(responseJson.page.totalElements);
+
+            setTotalPage(responseJson.page.totalPages);
 
             const loadedBooks: BookModel[] = [];
 
@@ -52,11 +66,12 @@ export const SearchBooksPage = ()=>{
                 setHttpError(error.message);
             }
         )
-    }, []);
+        window.scroll(0, 0);
+    }, [currentPage]);
 
     if (isLoading) {
         return (
-            <SpinnerLoading/>
+            <SpinnerLoading />
         );
     }
 
@@ -66,7 +81,101 @@ export const SearchBooksPage = ()=>{
         </div>);
     }
 
+
+
+    const indexOfFirstBook: number = currentPage * booksPerPage + 1;
+
+    let lastItem = (currentPage + 1) * booksPerPage > totalElementOfBooks ? totalElementOfBooks
+        : (currentPage + 1) * booksPerPage;
+
+    const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
     return (
-        <div></div>
+        <div>
+            <div className="container">
+                <div>
+
+                    <div className="row mt-5">
+                        <div className="col-6">
+                            <div className="d-flex">
+                                <input type="search"
+                                    className="form-control me-2"
+                                    placeholder="Search"
+                                    aria-labelledby="Search" />
+                                <button className="btn btn-outlike-success">
+                                    Search
+                                </button>
+                            </div>
+
+                        </div>
+                        <div className="col-4">
+                            <div className="dropdown">
+                                <button className="btn btn-secondary dropdown-toggle"
+                                    type="button" id="dropdownMenuButton1"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Category
+                                </button>
+                                <ul className="dropdown-menu"
+                                    aria-labelledby="dropdownMenuButton1">
+                                    <li>
+                                        <a href="#"
+                                            className="dropdown-item">
+                                            All
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#"
+                                            className="dropdown-item">
+                                            Front End
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#"
+                                            className="dropdown-item">
+                                            Back End
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#"
+                                            className="dropdown-item">
+                                            Data
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#"
+                                            className="dropdown-item">
+                                            Devops
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div className="mt-3">
+                        <h5>Number of results: ({totalElementOfBooks})</h5>
+                    </div>
+                    <p>
+                        {indexOfFirstBook} to {lastItem} of {totalElementOfBooks} items:
+                    </p>
+                    {
+                        totalPage > 1 &&
+                        <Pagination currentPage={currentPage + 1}
+                            totalPage={totalPage} paginate={paginate} />
+                    }
+                    {
+                        books.map(book => (
+                            <SearchBook book={book} key={book.id} />
+                        ))
+                    }
+                    {
+                        totalPage > 1 &&
+                        <Pagination currentPage={currentPage + 1}
+                            totalPage={totalPage} paginate={paginate} />
+                    }
+                </div>
+            </div>
+        </div>
     );
 }
