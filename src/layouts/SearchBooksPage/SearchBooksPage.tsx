@@ -31,10 +31,10 @@ export const SearchBooksPage = () => {
 
             let url: string = '';
 
-            if(searchUrl===''){
+            if (searchUrl === '') {
                 url = `${baseUrl}?page=${currentPage}&size=${booksPerPage}`;
-            } else{
-                url = `${baseUrl}${searchUrl}`;
+            } else {
+                url = `${baseUrl}${searchUrl}?title=${search}&page=${currentPage}&size=${booksPerPage}`;
             }
 
             console.log('url: ' + url);
@@ -76,8 +76,8 @@ export const SearchBooksPage = () => {
         fetchBooks().catch(
             (error: any) => {
                 setIsLoading(false);
-                setHttpError(error.message );
-                
+                setHttpError(error.message);
+
             }
         )
         window.scroll(0, 0);
@@ -95,13 +95,14 @@ export const SearchBooksPage = () => {
         </div>);
     }
 
-    const searchHandleChange = ()=>{
-        if(search===''){
+    const searchHandleChange = () => {
+        setCurrentPage(0);
+        if (search === '') {
             setSearchUrl('');
         } else {
-            
-            setSearchUrl(`/search/findByTitleContaining?title=${search}&page=0&size=${booksPerPage}`);
-        
+
+            setSearchUrl(`/search/findByTitleContaining`);
+
         }
     }
 
@@ -125,10 +126,10 @@ export const SearchBooksPage = () => {
                                 <input type="search"
                                     className="form-control me-2"
                                     placeholder="Search"
-                                    aria-labelledby="Search" 
-                                    onChange={e=>setSearch(e.target.value)}/>
+                                    aria-labelledby="Search"
+                                    onChange={e => setSearch(e.target.value)} />
                                 <button className="btn btn-outline-success"
-                                    onClick={()=>searchHandleChange()}>
+                                    onClick={() => searchHandleChange()}>
                                     Search
                                 </button>
                             </div>
@@ -179,21 +180,37 @@ export const SearchBooksPage = () => {
                         </div>
 
                     </div>
+
                     <div className="mt-3">
                         <h5>Number of results: ({totalElementOfBooks})</h5>
                     </div>
-                    <p>
-                        {indexOfFirstBook} to {lastItem} of {totalElementOfBooks} items:
-                    </p>
-                    {
-                        totalPage > 1 &&
-                        <Pagination currentPage={currentPage + 1}
-                            totalPage={totalPage} paginate={paginate} />
-                    }
-                    {
-                        books.map(book => (
-                            <SearchBook book={book} key={book.id} />
-                        ))
+                    {totalElementOfBooks >0 ?
+                    <>
+                        <p>
+                            {indexOfFirstBook} to {lastItem} of {totalElementOfBooks} items:
+                        </p>
+                        {
+                            totalPage > 1 &&
+                            <Pagination currentPage={currentPage + 1}
+                                totalPage={totalPage} paginate={paginate} />
+                        }
+                        {
+                            books.map(book => (
+                                <SearchBook book={book} key={book.id} />
+                            ))
+                        }
+                    </>
+                    :
+                    <div className="m-5">
+                        <h3>
+                            Can't find what you are looking for?
+                        </h3>
+                        <a href="#" type="button"
+                          className="btn main-color btn-md px-4 me-md-2
+                                    fw-bold text-white">
+                            Library Services
+                        </a>
+                    </div>
                     }
                     {
                         totalPage > 1 &&
