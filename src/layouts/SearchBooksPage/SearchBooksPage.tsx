@@ -25,6 +25,8 @@ export const SearchBooksPage = () => {
 
     const [searchUrl, setSearchUrl] = useState('');
 
+    const [categorySelection, setCategorySelection] = useState('Book Category');
+
     useEffect(() => {
         const fetchBooks = async () => {
             const baseUrl: string = "http://localhost:8080/api/bookEntities";
@@ -34,7 +36,7 @@ export const SearchBooksPage = () => {
             if (searchUrl === '') {
                 url = `${baseUrl}?page=${currentPage}&size=${booksPerPage}`;
             } else {
-                url = `${baseUrl}${searchUrl}?title=${search}&page=${currentPage}&size=${booksPerPage}`;
+                url = `${baseUrl}${searchUrl}&page=${currentPage}&size=${booksPerPage}`;
             }
 
             console.log('url: ' + url);
@@ -101,11 +103,29 @@ export const SearchBooksPage = () => {
             setSearchUrl('');
         } else {
 
-            setSearchUrl(`/search/findByTitleContaining`);
+            setSearchUrl(`/search/findByTitleContaining?title=${search}`);
 
         }
     }
 
+
+    const categoryFieldChange = (value: string) => {
+        
+        setCurrentPage(0);
+
+        if (value.toLocaleLowerCase() === 'fe' ||
+            value.toLocaleLowerCase() === 'be' ||
+            value.toLocaleLowerCase() === 'data' ||
+            value.toLocaleLowerCase() === 'devops'
+        ) {
+            setCategorySelection(value);
+            setSearchUrl(`/search/findByCategoryContaining?category=${value}`);
+
+        } else {
+            setCategorySelection('All');
+            
+        }
+    }
 
 
     const indexOfFirstBook: number = currentPage * booksPerPage + 1;
@@ -140,35 +160,35 @@ export const SearchBooksPage = () => {
                                 <button className="btn btn-secondary dropdown-toggle"
                                     type="button" id="dropdownMenuButton1"
                                     data-bs-toggle="dropdown" aria-expanded="false">
-                                    Category
+                                    {categorySelection}
                                 </button>
                                 <ul className="dropdown-menu"
                                     aria-labelledby="dropdownMenuButton1">
-                                    <li>
+                                    <li onClick={() => categoryFieldChange('All')}>
                                         <a href="#"
                                             className="dropdown-item">
                                             All
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categoryFieldChange('FE')}>
                                         <a href="#"
                                             className="dropdown-item">
                                             Front End
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categoryFieldChange('BE')}>
                                         <a href="#"
                                             className="dropdown-item">
                                             Back End
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categoryFieldChange('Data')}>
                                         <a href="#"
                                             className="dropdown-item">
                                             Data
                                         </a>
                                     </li>
-                                    <li>
+                                    <li onClick={() => categoryFieldChange('DevOps')}>
                                         <a href="#"
                                             className="dropdown-item">
                                             Devops
@@ -184,33 +204,33 @@ export const SearchBooksPage = () => {
                     <div className="mt-3">
                         <h5>Number of results: ({totalElementOfBooks})</h5>
                     </div>
-                    {totalElementOfBooks >0 ?
-                    <>
-                        <p>
-                            {indexOfFirstBook} to {lastItem} of {totalElementOfBooks} items:
-                        </p>
-                        {
-                            totalPage > 1 &&
-                            <Pagination currentPage={currentPage + 1}
-                                totalPage={totalPage} paginate={paginate} />
-                        }
-                        {
-                            books.map(book => (
-                                <SearchBook book={book} key={book.id} />
-                            ))
-                        }
-                    </>
-                    :
-                    <div className="m-5">
-                        <h3>
-                            Can't find what you are looking for?
-                        </h3>
-                        <a href="#" type="button"
-                          className="btn main-color btn-md px-4 me-md-2
+                    {totalElementOfBooks > 0 ?
+                        <>
+                            <p>
+                                {indexOfFirstBook} to {lastItem} of {totalElementOfBooks} items:
+                            </p>
+                            {
+                                totalPage > 1 &&
+                                <Pagination currentPage={currentPage + 1}
+                                    totalPage={totalPage} paginate={paginate} />
+                            }
+                            {
+                                books.map(book => (
+                                    <SearchBook book={book} key={book.id} />
+                                ))
+                            }
+                        </>
+                        :
+                        <div className="m-5">
+                            <h3>
+                                Can't find what you are looking for?
+                            </h3>
+                            <a href="#" type="button"
+                                className="btn main-color btn-md px-4 me-md-2
                                     fw-bold text-white">
-                            Library Services
-                        </a>
-                    </div>
+                                Library Services
+                            </a>
+                        </div>
                     }
                     {
                         totalPage > 1 &&
