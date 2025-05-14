@@ -6,7 +6,7 @@ This project is created using command **npx create-react-app react-library --tem
 
 Install bootstrap using command **npm install bootstrap@5.3.6**
 
-Install react router using command **npm install react-router-dom@5**
+Install react router using command **npm install react-router-dom@5** and **npm install --save-dev @types/react-router-dom@5**
 
 ## Available Scripts
 
