@@ -8,6 +8,8 @@ Install bootstrap using command **npm install bootstrap@5.3.6**
 
 Install react router using command **npm install react-router-dom@5** and **npm install --save-dev @types/react-router-dom@5**
 
+Install bootstrap icons using command **npm i bootstrap-icons**
+
 ## Available Scripts
 
 In the project directory, you can run:
