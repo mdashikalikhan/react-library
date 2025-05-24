@@ -3,6 +3,7 @@ import BookModel from "../../models/BookModel";
 import { SpinnerLoading } from "../utils/SpinnerLoading";
 import { StarsReview } from "../utils/StarsReview";
 import { CheckoutAndReviewBox } from "./CheckoutAndReviewBox";
+import ReviewModel from "../../models/ReviewModel";
 
 export const BookCheckoutPage = () => {
 
@@ -10,6 +11,11 @@ export const BookCheckoutPage = () => {
     const [isLoadingPage, setIsLoadingPage] = useState(true);
     const [httpError, setHttpError] = useState(null);
 
+    //Review State
+
+    const [reviews, setReviews] = useState<ReviewModel[]>([]);
+    const [totalStars, setTotalStars] = useState(0);
+    const [isLoadingReview, setIsLoadingReview] = useState(true);
 
     const bookId = window.location.pathname.split('/')[2];
 
@@ -57,6 +63,12 @@ export const BookCheckoutPage = () => {
 
 
     }, []);
+
+    useEffect(
+        ()=>{
+            
+        }
+    );
 
     if (isLoadingPage) {
         return (
