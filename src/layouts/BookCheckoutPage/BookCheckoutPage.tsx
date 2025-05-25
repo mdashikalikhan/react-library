@@ -75,7 +75,27 @@ export const BookCheckoutPage = () => {
                 throw new Error('Something went wrong!');
             }
 
-            
+            const responseJson = await responseReviews.json();
+
+            const responseData = responseJson._embedded.reviewEntities;
+
+            const loadedReviews: ReviewModel[] = [];
+
+            let weightedStarReviews:number = 0;
+
+            for(const key in responseData){
+                loadedReviews.push(
+                    {
+                        id: responseData[key].id,
+                        userEmail: responseData[key].userEmail,
+                        reviewDate: responseData[key].reviewDate,
+                        rating: responseData[key].rating,
+                        bookId: responseData[key].bookId,
+                        reviewDescription: responseData[key].reviewDescription
+                    }
+
+                );
+            }
           }  
         }
     );
