@@ -16,15 +16,13 @@ export const StarsReview: React.FC<{ rating: number, size: number }> = (props) =
 
     const maxRating = 5;
 
-    if(props.rating===undefined || props.rating<=0){
+    if(props.rating===undefined){
         noStar = maxRating;
-    } else if(props.rating > 5) {
-        fullStar = maxRating;
     } else{
 
-        fullStar = Math.floor(Math.min(maxRating, props.rating));    
+        fullStar = Math.floor(Math.max(0,Math.min(maxRating, props.rating)));    
         
-        halfStar = props.rating % 1 > 0 ? 1 : 0;
+        halfStar = props.rating % 1 > 0 && props.rating>=0 && props.rating<=maxRating  ? 1 : 0;
 
         noStar = maxRating - fullStar - halfStar;
         
