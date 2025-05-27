@@ -6,6 +6,7 @@ import { CheckoutAndReviewBox } from "./CheckoutAndReviewBox";
 import ReviewModel from "../../models/ReviewModel";
 import { error } from "console";
 import { LatestReviews } from "./LatestReviews";
+import NumberUtils from "../utils/NumberUtils";
 
 export const BookCheckoutPage = () => {
 
@@ -101,9 +102,10 @@ export const BookCheckoutPage = () => {
                     weightedStarReviews = weightedStarReviews + responseData[key].rating;
                 }
 
-                if (loadedReviews) {
-                    const round = Math.round(weightedStarReviews / loadedReviews.length).toFixed(1);
-                    setTotalStars(Number(round));
+                if (loadedReviews.length>0) {
+                    const round : number = NumberUtils.roundedToHalfWithDecimal (weightedStarReviews / loadedReviews.length);
+                    
+                    setTotalStars(round);
                 }
 
                 setReviews(loadedReviews);
