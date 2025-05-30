@@ -10,6 +10,10 @@ Install react router using command **npm install react-router-dom@5** and **npm 
 
 Install bootstrap icons using command **npm i bootstrap-icons**
 
+Install okta signin widget **npm install @okta/okta-signin-widget@6.3.3**
+
+Update npm version **npm install -g npm@11.4.1**
+
 ## Available Scripts
 
 In the project directory, you can run:
