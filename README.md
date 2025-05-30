@@ -2,22 +2,22 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-This project is created using command: <br/>
+This project is created using command: \
 **npx create-react-app react-library --template typescript**
 
-Install bootstrap using command: <br/>
+Install bootstrap using command: \
 **npm install bootstrap@5.3.6**
 
-Install react router using command: <br/>
+Install react router using command: \
 **npm install react-router-dom@5** and **npm install --save-dev @types/react-router-dom@5**
 
-Install bootstrap icons using command: <br/>
+Install bootstrap icons using command: \
 **npm i bootstrap-icons**
 
-Install okta signin widget: <br/>
+Install okta signin widget: \
 **npm install @okta/okta-signin-widget@6.3.3**
 
-Update npm version: <br/>
+Update npm version: \
 **npm install -g npm@11.4.1**
 
 ## Available Scripts
