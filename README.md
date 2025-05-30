@@ -20,6 +20,9 @@ Install okta signin widget: \
 Update npm version: \
 **npm install -g npm@11.4.1**
 
+Install okta react SDK: \
+**npm install @okta/okta-react**
+
 ## Available Scripts
 
 In the project directory, you can run:
